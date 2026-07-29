@@ -1,0 +1,310 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="SafeStart eKYC clickable prototype for C369 Financial Technologies." />
+  <title>SafeStart eKYC</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <header class="topbar">
+    <a class="brand" href="#" data-go="welcome" aria-label="SafeStart home">
+      <span class="brand-icon">🛡️</span>
+      <span>SafeStart eKYC</span>
+    </a>
+    <button class="help-link" type="button" data-go="help">Help</button>
+  </header>
+
+  <main class="app-shell">
+    <section class="phone-frame" aria-live="polite">
+      <div class="progress-wrap hidden" id="progressWrap">
+        <div class="progress-label">
+          <span id="progressText">Step 1 of 5</span>
+          <span id="progressPercent">20%</span>
+        </div>
+        <div class="progress-track">
+          <div class="progress-bar" id="progressBar"></div>
+        </div>
+      </div>
+
+      <!-- Welcome -->
+      <section class="screen active" id="welcome">
+        <div class="hero-icon">🪪</div>
+        <p class="eyebrow">Secure digital onboarding</p>
+        <h1>Open your account safely and easily</h1>
+        <p class="lead">
+          SafeStart guides you through identity verification using simple instructions,
+          clear feedback and secure compliance checks.
+        </p>
+        <div class="feature-list">
+          <div><span>✓</span> Step-by-step guidance</div>
+          <div><span>✓</span> NRIC and selfie verification</div>
+          <div><span>✓</span> Fraud and AML screening</div>
+        </div>
+        <button class="btn primary" type="button" data-go="account">Start Application</button>
+        <button class="btn secondary" type="button" data-go="help">Need Help?</button>
+      </section>
+
+      <!-- Account -->
+      <section class="screen" id="account">
+        <p class="eyebrow">Create account</p>
+        <h2>Let’s get started</h2>
+        <p class="screen-note">Enter your basic contact information.</p>
+
+        <form id="accountForm" novalidate>
+          <label>Full name
+            <input id="fullName" type="text" placeholder="e.g. Faruq Zaim" required />
+          </label>
+          <label>Email address
+            <input id="email" type="email" placeholder="name@example.com" required />
+          </label>
+          <label>Mobile number
+            <input id="mobile" type="tel" placeholder="e.g. 9123 4567" required />
+          </label>
+          <label>Password
+            <input id="password" type="password" placeholder="At least 8 characters" minlength="8" required />
+          </label>
+          <p class="form-error" id="accountError"></p>
+          <div class="button-row">
+            <button class="btn secondary" type="button" data-go="welcome">Back</button>
+            <button class="btn primary" type="submit">Continue</button>
+          </div>
+        </form>
+      </section>
+
+      <!-- Personal details -->
+      <section class="screen" id="details">
+        <p class="eyebrow">Personal details</p>
+        <h2>Tell us about yourself</h2>
+        <p class="screen-note">These details are required for identity verification.</p>
+
+        <form id="detailsForm" novalidate>
+          <label>NRIC number
+            <input id="nric" type="text" placeholder="e.g. S1234567A" maxlength="9" required />
+          </label>
+          <label>Date of birth
+            <input id="dob" type="date" required />
+          </label>
+          <label>Home address
+            <textarea id="address" placeholder="Enter your residential address" required></textarea>
+          </label>
+          <label>Occupation
+            <select id="occupation" required>
+              <option value="">Select occupation</option>
+              <option>Student</option>
+              <option>Employed</option>
+              <option>Self-employed</option>
+              <option>Freelancer</option>
+              <option>Retired</option>
+              <option>Other</option>
+            </select>
+          </label>
+          <p class="form-error" id="detailsError"></p>
+          <div class="button-row">
+            <button class="btn secondary" type="button" data-go="account">Back</button>
+            <button class="btn primary" type="submit">Next</button>
+          </div>
+        </form>
+      </section>
+
+      <!-- Consent -->
+      <section class="screen" id="consent">
+        <p class="eyebrow">Data consent</p>
+        <h2>Your privacy matters</h2>
+        <div class="info-card">
+          SafeStart collects your personal information to verify your identity,
+          prevent fraud and perform regulatory checks. This prototype does not
+          upload information to a real bank or government database.
+        </div>
+
+        <label class="check-row">
+          <input id="dataConsent" type="checkbox" />
+          <span>I agree to the collection and use of my personal data.</span>
+        </label>
+        <label class="check-row">
+          <input id="verifyConsent" type="checkbox" />
+          <span>I agree to identity verification and compliance screening.</span>
+        </label>
+
+        <p class="form-error" id="consentError"></p>
+        <div class="button-row">
+          <button class="btn secondary" type="button" data-go="details">Back</button>
+          <button class="btn primary" id="consentContinue" type="button">Agree & Continue</button>
+        </div>
+      </section>
+
+      <!-- Upload -->
+      <section class="screen" id="upload">
+        <p class="eyebrow">Identity document</p>
+        <h2>Upload your NRIC</h2>
+        <p class="screen-note">For this prototype, any image file may be selected.</p>
+
+        <div class="upload-grid">
+          <label class="upload-box" id="frontBox">
+            <span class="upload-icon">📷</span>
+            <strong>NRIC Front</strong>
+            <span id="frontStatus">Choose image</span>
+            <input id="frontFile" type="file" accept="image/*" />
+          </label>
+
+          <label class="upload-box" id="backBox">
+            <span class="upload-icon">📷</span>
+            <strong>NRIC Back</strong>
+            <span id="backStatus">Choose image</span>
+            <input id="backFile" type="file" accept="image/*" />
+          </label>
+        </div>
+
+        <div class="tips">
+          <strong>Photo tips</strong>
+          <ul>
+            <li>Use good lighting.</li>
+            <li>Show all four corners.</li>
+            <li>Avoid glare and blurry images.</li>
+          </ul>
+        </div>
+
+        <p class="form-error" id="uploadError"></p>
+        <div class="button-row">
+          <button class="btn secondary" type="button" data-go="consent">Back</button>
+          <button class="btn primary" id="uploadContinue" type="button">Continue</button>
+        </div>
+      </section>
+
+      <!-- Selfie -->
+      <section class="screen" id="selfie">
+        <p class="eyebrow">Live selfie check</p>
+        <h2>Position your face in the frame</h2>
+        <div class="face-frame">
+          <div class="face-placeholder">🙂</div>
+        </div>
+        <div class="tips compact">
+          <ul>
+            <li>Look directly at the camera.</li>
+            <li>Use good lighting.</li>
+            <li>Remove your mask or dark glasses.</li>
+          </ul>
+        </div>
+        <p class="success-message hidden" id="selfieSuccess">✓ Selfie captured successfully</p>
+        <div class="button-row">
+          <button class="btn secondary" type="button" data-go="upload">Back</button>
+          <button class="btn primary" id="takeSelfie" type="button">Take Selfie</button>
+        </div>
+      </section>
+
+      <!-- Verification -->
+      <section class="screen" id="verification">
+        <p class="eyebrow">Automated checks</p>
+        <h2>Verifying your application</h2>
+        <p class="screen-note">Please wait while SafeStart performs the required checks.</p>
+
+        <div class="check-list">
+          <div class="check-item" data-check="0"><span>○</span> Checking NRIC quality and authenticity</div>
+          <div class="check-item" data-check="1"><span>○</span> Comparing selfie with NRIC photo</div>
+          <div class="check-item" data-check="2"><span>○</span> Running fraud detection</div>
+          <div class="check-item" data-check="3"><span>○</span> Running AML and watchlist screening</div>
+          <div class="check-item" data-check="4"><span>○</span> Calculating application risk level</div>
+        </div>
+
+        <div class="result-options hidden" id="resultOptions">
+          <p><strong>Prototype demonstration:</strong> choose an outcome to view.</p>
+          <button class="btn success" type="button" data-go="approved">Low Risk — Approve</button>
+          <button class="btn warning" type="button" data-go="review">Medium Risk — Manual Review</button>
+          <button class="btn danger" type="button" data-go="rejected">High Risk — Reject</button>
+        </div>
+      </section>
+
+      <!-- Approved -->
+      <section class="screen result-screen" id="approved">
+        <div class="result-icon">✅</div>
+        <p class="eyebrow">Low risk outcome</p>
+        <h2>Application Approved</h2>
+        <p>Your identity has been successfully verified. You may continue to account setup.</p>
+        <div class="decision-card">
+          <strong>Why?</strong>
+          <span>Identity matched, no suspicious fraud indicators and no AML alert was found.</span>
+        </div>
+        <button class="btn primary" type="button" data-go="welcome">Finish Demo</button>
+      </section>
+
+      <!-- Review -->
+      <section class="screen result-screen" id="review">
+        <div class="result-icon">⚠️</div>
+        <p class="eyebrow">Medium risk outcome</p>
+        <h2>Application Under Review</h2>
+        <p>Some details require additional checking by a compliance officer.</p>
+        <div class="decision-card">
+          <strong>Why?</strong>
+          <span>An uncertain match or possible watchlist alert should not be automatically rejected.</span>
+        </div>
+        <button class="btn primary" type="button" data-go="welcome">Finish Demo</button>
+      </section>
+
+      <!-- Rejected -->
+      <section class="screen result-screen" id="rejected">
+        <div class="result-icon">❌</div>
+        <p class="eyebrow">High risk outcome</p>
+        <h2>Application Unsuccessful</h2>
+        <p>We could not verify this application. Please check the information or contact support.</p>
+        <div class="decision-card">
+          <strong>Possible reason</strong>
+          <span>Suspected document tampering, repeated application or serious identity mismatch.</span>
+        </div>
+        <div class="button-stack">
+          <button class="btn primary" type="button" data-go="details">Try Again</button>
+          <button class="btn secondary" type="button" data-go="help">Contact Support</button>
+        </div>
+      </section>
+
+      <!-- Error -->
+      <section class="screen result-screen" id="error">
+        <div class="result-icon">📸</div>
+        <p class="eyebrow">Error handling</p>
+        <h2>Image Not Clear</h2>
+        <p>We could not read your NRIC image.</p>
+        <div class="tips">
+          <ul>
+            <li>Use brighter lighting.</li>
+            <li>Keep the card flat.</li>
+            <li>Show all four corners.</li>
+            <li>Avoid camera movement.</li>
+          </ul>
+        </div>
+        <button class="btn primary" type="button" data-go="upload">Retake Photo</button>
+      </section>
+
+      <!-- Help -->
+      <section class="screen" id="help">
+        <p class="eyebrow">Support</p>
+        <h2>How can we help?</h2>
+        <div class="accordion">
+          <details>
+            <summary>How do I upload my NRIC?</summary>
+            <p>Place the card on a flat surface, use good lighting and make sure all four corners are visible.</p>
+          </details>
+          <details>
+            <summary>How do I complete the selfie check?</summary>
+            <p>Look directly at the camera, keep your face inside the frame and remove any mask or dark glasses.</p>
+          </details>
+          <details>
+            <summary>Why is my information collected?</summary>
+            <p>It is used for identity verification, fraud prevention and regulatory screening.</p>
+          </details>
+          <details>
+            <summary>What happens during manual review?</summary>
+            <p>A compliance officer checks uncertain information before making the final decision.</p>
+          </details>
+        </div>
+        <button class="btn primary" type="button" id="helpBack">Back</button>
+      </section>
+    </section>
+  </main>
+
+  <footer>
+    <p>Educational prototype for C369 Financial Technologies. No real personal data is stored.</p>
+  </footer>
+
+  <script src="script.js"></script>
+</body>
+</html>
